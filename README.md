@@ -1,49 +1,72 @@
-# Advanced Trade Skill Window 2 — WotLK 3.3.5a port
+# Métiers+ — port WotLK 3.3.5a
 
-An enhanced professions window for World of Warcraft **3.3.5a** (Wrath of the Lich King),
-ported for the **Ebonhold** server. It replaces the default tradeskill window with a
-better one: recipe queue, shopping list, advanced search, custom recipe categories,
-reagent tracking across bags/bank/alts, and more.
+Une fenêtre de métiers améliorée pour **World of Warcraft 3.3.5a** (Wrath of the Lich King),
+portée pour le serveur **Ebonhold**. Elle remplace la fenêtre de métiers par défaut par une
+version bien plus complète : file d'attente de fabrication, liste de courses, recherche
+avancée, catégories de recettes personnalisées, et suivi des réactifs dans les sacs, la
+banque et les autres persos.
 
-> This is a **community port**, not the original work. All credit for the addon goes to
-> its authors (see below). This repository only adapts their Vanilla (1.12) addon to run
-> on the 3.3.5a client.
+> *Métiers+* est le nom donné au portage pour Ebonhold. L'addon d'origine est
+> **Advanced Trade Skill Window 2** — tout le mérite revient à ses auteurs (voir Crédits).
+> Ce dépôt ne fait qu'adapter leur addon Vanilla (1.12) au client 3.3.5a.
 
-## Credits — original authors
+---
 
-This addon is **Advanced Trade Skill Window 2** by:
+## Français
 
-- **Alexander Shelokhnev** (*Dreamios* / *Shellyoung*) — author of the ATSW2 rewrite (2022).
-  Original repository: <https://github.com/Shellyoung/AdvancedTradeSkillWindow2>
-- **Rene Schneider** (*Slarti*) — author of the original Advanced Trade Skill Window (2006).
-- **laytya** — earlier contributor (2017).
+### Fonctionnalités
+- Remplace automatiquement la fenêtre de métiers Blizzard.
+- File d'attente de fabrication + bouton « tout créer ».
+- Recherche avancée (par réactif, niveau, qualité, faisabilité).
+- Tri personnalisé avec éditeur de catégories.
+- Suivi des réactifs : sacs, banque, autres personnages, marchands.
+- L'enchantement passe par la fenêtre de métiers normale.
 
-The original project targets WoW **Vanilla 1.12** and carries **no license** (all rights
-reserved by its authors). This 3.3.5a port is shared for the Ebonhold community out of
-appreciation for their work. If an original author would prefer this not be hosted here,
-please open an issue and it will be removed.
+### Installation
+- **Via le launcher Ebonhold** (recommandé) : Catalogue → installer « Métiers+ ».
+- **Manuel** : télécharge le `.zip` de la dernière release, extrais le dossier
+  `AdvancedTradeSkillWindow2` dans `World of Warcraft\Interface\AddOns`, puis `/reload` en jeu.
 
-## What this port changes
+### Utilisation
+Ouvre n'importe quel métier — la fenêtre remplace celle de Blizzard automatiquement.
+Options en jeu : `/atsw config`.
 
-Only compatibility fixes for the 3.3.5a client — no feature changes. Notably:
+### Crédits
+Addon d'origine **Advanced Trade Skill Window 2**, par :
+- **Alexander Shelokhnev** (*Dreamios* / *Shellyoung*) — auteur de la réécriture ATSW2 (2022).
+  Dépôt d'origine : <https://github.com/Shellyoung/AdvancedTradeSkillWindow2>
+- **Rene Schneider** (*Slarti*) — auteur de l'Advanced Trade Skill Window original (2006).
+- **laytya** — contributeur (2017).
 
-- TOC interface `11200 → 30300`.
-- Vanilla events `SPELLCAST_*` → `UNIT_SPELLCAST_*` (cast progress / queue).
-- Enchanting routed through the TradeSkill API (the old Craft API is absent on 3.3.5 cores).
-- Lua 5.0 `arg` vararg tables → `select('#', ...)`.
-- Button font/colour methods routed to the button FontString (Buttons aren't FontInstances in 3.3.5).
-- `UIDropDownMenu` / `FauxScrollFrame` argument-order fixes, `string.gfind → gmatch`,
-  `GetPoint(0) → GetPoint(1)`, `ChatFrameEditBox → ChatFrame1EditBox`, and the
-  `OptionFrameBoxTemplate` re-provided.
+Le projet d'origine vise WoW **Vanilla 1.12** et n'a **aucune licence** (tous droits réservés
+à ses auteurs). Ce portage 3.3.5a est partagé pour la communauté Ebonhold par reconnaissance
+de leur travail. Si un auteur d'origine préfère qu'il ne soit pas hébergé ici, qu'il ouvre une
+issue et il sera retiré.
 
-## Installation
+---
 
-**Via the Ebonhold launcher** (recommended): Catalogue → install "Advanced Trade Skill Window 2".
+## English
 
-**Manual**: download the latest release `.zip`, extract the `AdvancedTradeSkillWindow2`
-folder into `World of Warcraft\Interface\AddOns`, then `/reload` in game.
+A WotLK **3.3.5a** port of **Advanced Trade Skill Window 2** for the Ebonhold server, here
+named *Métiers+*. It replaces the default tradeskill window with a much better one: recipe
+queue, shopping list, advanced search, custom recipe categories, and reagent tracking across
+bags / bank / alts.
 
-## Usage
+### Install
+- **Ebonhold launcher** (recommended): Catalogue → install "Métiers+".
+- **Manual**: download the latest release `.zip`, extract the `AdvancedTradeSkillWindow2`
+  folder into `World of Warcraft\Interface\AddOns`, then `/reload` in game.
 
-Open any profession — the window replaces the Blizzard one automatically.
-Options: `/atsw config`.
+Open any profession — the window replaces the Blizzard one automatically. Options: `/atsw config`.
+
+### Credits
+All credit for the addon itself goes to the original authors — **Shellyoung** (ATSW2 rewrite),
+**Rene Schneider** (original ATSW), **laytya**. Original repository:
+<https://github.com/Shellyoung/AdvancedTradeSkillWindow2>. The upstream project targets Vanilla
+1.12 and carries no license (all rights reserved). This 3.3.5a port is shared for the Ebonhold
+community; if an original author objects, open an issue and it will be removed.
+
+### What the port changes
+Compatibility fixes only — no feature changes (events, Craft API, Lua 5.0 `arg`, Button
+font/colour methods, `UIDropDownMenu` / `FauxScrollFrame` signatures, renamed globals,
+protected-function tainting, etc.).

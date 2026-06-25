@@ -1,7 +1,7 @@
 ## Interface: 30300
-## Title: Advanced Trade Skill Window 2
-## Notes: Improved window for your professions (WotLK 3.3.5 port for Ebonhold)
-## Version: 2.1.16
+## Title: Métiers+
+## Notes: Fenêtre de métiers améliorée — file d'attente, recherche avancée, catégories perso (port d'Advanced Trade Skill Window 2 pour Ebonhold)
+## Version: 2.1.17
 ## SavedVariables: ATSW_Characters, ATSW_Profession, ATSW_SelectedRecipe, ATSW_SortBy, ATSW_SearchString, ATSW_SubClassFilter, ATSW_InvSlotFilter, ATSW_ScrollOffset, ATSW_PreviousRecipes, ATSW_Tasks, ATSW_TimeCost, ATSW_NecessaryReagents, ATSW_ContractedCategories, ATSW_Amount, ATSW_Bags, ATSW_Bank, ATSW_Merchant, ATSW_Options, ATSW_CustomCategories, ATSW_CSOpenCategory, ATSW_CSSelected, ATSW_Attributes, ATSW_Debug
 
 ## X-ReleaseDate: $Date: 27/03/2026 $

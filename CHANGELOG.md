@@ -1,5 +1,12 @@
 # Changelog
 
+## v2.1.17 (3.3.5a port)
+
+- **Correctif important** : ne remplace plus les fonctions protégées `CastSpellByName` /
+  `CastSpell` / `UseAction` (cela « souillait » le chemin de cast sécurisé et **bloquait les
+  sorts du joueur** en 3.3.5). Remplacées par des `hooksecurefunc`.
+- Renommé **« Métiers+ »** (nom affiché) ; README en français puis anglais.
+
 ## v2.1.16 (3.3.5a port)
 
 First release of the WotLK **3.3.5a** port of Advanced Trade Skill Window 2 (upstream

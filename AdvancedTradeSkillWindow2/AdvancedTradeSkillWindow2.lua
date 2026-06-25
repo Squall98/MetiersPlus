@@ -1155,80 +1155,29 @@ Original_PlaySound = PlaySound
 
 local function Stub() end
 
-local Original_CastSpellByName = CastSpellByName
-local function MyCastSpellByName(Name, OnSelf)
-	local Storage = PlaySound
-	
-	LastCastName = Name
-	
-	PlaySound = Stub	
-	Original_CastSpellByName(Name, OnSelf)
-	PlaySound = Storage
-end
-CastSpellByName = MyCastSpellByName
-
-local Original_CastSpell = CastSpell
-local function MyCastSpell(spellID, spellbookType)
-	
-	local Storage = PlaySound
-	
-	LastCastName = GetSpellName(spellID, spellbookType)
-	
-	PlaySound = Stub
-	Original_CastSpell(spellID, spellbookType)
-	PlaySound = Storage
-end
-CastSpell = MyCastSpell
-
+-- WotLK 3.3.5: do NOT replace the protected globals CastSpellByName / CastSpell / UseAction
+-- (replacing them taints the secure cast path -> the player spellcasts get BLOCKED by WoW).
+-- Observe them with secure post-hooks instead; we only need the last cast name + a delay stamp.
 local function GetNameFromTooltip(Slot)
 	ATSWActionNameTooltip:SetParent(UIParent)
 	ATSWActionNameTooltip:SetOwner(UIParent, 'ANCHOR_NONE')
 	ATSWActionNameTooltip:SetAction(Slot)
-	
 	return ATSWActionNameTooltipTextLeft1:GetText()
 end
 
-local Original_UseAction = UseAction
-local function MyUseAction(Slot, CheckCursor, OnSelf)
-	local Storage = PlaySound
-	
-	LastCastName = GetNameFromTooltip(Slot)
-	
-	PlaySound = Stub
-	Original_UseAction(Slot, CheckCursor, OnSelf)
-	PlaySound = Storage
+local function ATSW_SafeHook(Name, Func)
+	if type(_G[Name]) == 'function' then hooksecurefunc(Name, Func) end
 end
-UseAction = MyUseAction
 
--- Craft delay detection functions
+ATSW_SafeHook('CastSpellByName', function(Name) LastCastName = Name end)
+ATSW_SafeHook('CastSpell', function(spellID, spellbookType) LastCastName = GetSpellName(spellID, spellbookType) end)
+ATSW_SafeHook('UseAction', function(Slot) LastCastName = GetNameFromTooltip(Slot) end)
 
-local Original_PickupContainerItem = PickupContainerItem
-local function MyPickupContainerItem(Bag, Slot)
-	Processing.Delay = GetTime()
-	Original_PickupContainerItem(Bag, Slot)
-end
-PickupContainerItem = MyPickupContainerItem
-
-local Original_BindEnchant = BindEnchant
-local function MyBindEnchant()
-	Processing.Delay = GetTime()
-	Original_BindEnchant()
-end
-BindEnchant = MyBindEnchant
-
-local Original_ReplaceEnchant = ReplaceEnchant
-local function MyReplaceEnchant()
-	Processing.Delay = GetTime()
-	Original_ReplaceEnchant()
-end
-ReplaceEnchant = MyReplaceEnchant
-
-local Original_ReplaceTradeEnchant = ReplaceTradeEnchant
-local function MyReplaceTradeEnchant()
-	Processing.Delay = GetTime()
-	Original_ReplaceTradeEnchant()
-end
-ReplaceTradeEnchant = MyReplaceTradeEnchant
+-- Craft delay detection: stamp the moment an item/enchant action starts.
+ATSW_SafeHook('PickupContainerItem', function() Processing.Delay = GetTime() end)
+ATSW_SafeHook('BindEnchant', function() Processing.Delay = GetTime() end)
+ATSW_SafeHook('ReplaceEnchant', function() Processing.Delay = GetTime() end)
+ATSW_SafeHook('ReplaceTradeEnchant', function() Processing.Delay = GetTime() end)
 
 -- Getting information from craft list functions
 
