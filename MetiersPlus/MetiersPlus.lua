@@ -2023,7 +2023,7 @@ end
 
 local function ChangeSmeltingIcon(Texture)
 	if Texture == 'Interface\\Icons\\Spell_Fire_FlameBlades' then
-		return 'Interface\\AddOns\\AdvancedTradeSkillWindow2\\Textures\\Smelting'
+		return 'Interface\\AddOns\\MetiersPlus\\Textures\\Smelting'
 	end
 	
 	return Texture
@@ -2392,7 +2392,7 @@ function ATSW_UpdateBackground()
 	local BG = ATSW_Background[GetProfessionTexture(Profession())]
 	
 	if BG then
-		ATSWBackground:SetTexture('Interface\\AddOns\\AdvancedTradeSkillWindow2\\Textures\\Background\\' .. BG)
+		ATSWBackground:SetTexture('Interface\\AddOns\\MetiersPlus\\Textures\\Background\\' .. BG)
 	else
 		ATSWBackground:SetTexture(nil)
 	end
@@ -2783,9 +2783,9 @@ function ATSW_OnEvent()
 		elseif arg1	== 'WINDOWED_MODE'	then
 			-- Fix for BarGlow texture becomes white if toggling windowed mode
 			ATSWProgressBarGlow:SetTexture(nil)
-			ATSWProgressBarGlow:SetTexture('Interface\\AddOns\\AdvancedTradeSkillWindow2\\Textures\\ProgressBarFlash')
+			ATSWProgressBarGlow:SetTexture('Interface\\AddOns\\MetiersPlus\\Textures\\ProgressBarFlash')
 			ATSWOptionsMenuHeader:SetTexture(nil)
-			ATSWOptionsMenuHeader:SetTexture('Interface\\AddOns\\AdvancedTradeSkillWindow2\\Textures\\UI-DialogBox-Header')
+			ATSWOptionsMenuHeader:SetTexture('Interface\\AddOns\\MetiersPlus\\Textures\\UI-DialogBox-Header')
 		end
 	elseif 	event == 'UI_ERROR_MESSAGE' 						then
 		if Processing.Active and (string.find(arg1, ERR_INV_FULL) or string.find(arg1, ERR_ITEM_MAX_COUNT) or string.find(arg1, sRequires)) then

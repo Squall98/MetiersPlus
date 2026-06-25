@@ -186,7 +186,7 @@
                         </Anchor>
                     </Anchors>
         		</Texture>
-                <Texture file="Interface\AddOns\AdvancedTradeSkillWindow2\Textures\UI-TaxiFrame-InBetween1">
+                <Texture file="Interface\AddOns\MetiersPlus\Textures\UI-TaxiFrame-InBetween1">
                     <Size x="128" y="512"/>
                     <Anchors>
                         <Anchor point="TOPLEFT">
@@ -194,7 +194,7 @@
                         </Anchor>
                     </Anchors>
                 </Texture>
-				<Texture file="Interface\AddOns\AdvancedTradeSkillWindow2\Textures\UI-TaxiFrame-BotLeftReplacement">
+				<Texture file="Interface\AddOns\MetiersPlus\Textures\UI-TaxiFrame-BotLeftReplacement">
                     <Size x="256" y="256"/>
                     <Anchors>
                         <Anchor point="TOPLEFT">
@@ -210,7 +210,7 @@
                         </Anchor>
                     </Anchors>
                 </Texture>
-                <Texture file="Interface\AddOns\AdvancedTradeSkillWindow2\Textures\UI-TaxiFrame-BotRightReplacement">
+                <Texture file="Interface\AddOns\MetiersPlus\Textures\UI-TaxiFrame-BotRightReplacement">
                     <Size x="128" y="256"/>
                     <Anchors>
                         <Anchor point="TOPLEFT">
@@ -220,7 +220,7 @@
                 </Texture>
 	      	</Layer>
 	        <Layer level="BORDER">
-                <Texture file="Interface\AddOns\AdvancedTradeSkillWindow2\Textures\UI-TaxiFrame-InBetween2">
+                <Texture file="Interface\AddOns\MetiersPlus\Textures\UI-TaxiFrame-InBetween2">
                     <Size x="514" y="512"/>
                     <Anchors>
                         <Anchor point="TOPLEFT">
@@ -488,7 +488,7 @@
 			<Frame name="ATSWCSAddCategoryLabelFrame">
 				<Layers>
 					<Layer level="BACKGROUND">
-						<Texture name="ATSWCSAddCategoryIcon" file="Interface\AddOns\AdvancedTradeSkillWindow2\Textures\Category">
+						<Texture name="ATSWCSAddCategoryIcon" file="Interface\AddOns\MetiersPlus\Textures\Category">
 							<Size x="12" y="12"/>
 							<Anchors>
 								<Anchor point="TOPLEFT" relativeTo="ATSWCSNewCategoryBox" relativePoint="TOPLEFT">

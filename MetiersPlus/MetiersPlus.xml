@@ -643,7 +643,7 @@
 	<Frame name="ATSWProgressBarBorder" parent="ATSWProgressBar">
 		<Layers>
 			<Layer level="OVERLAY">
-				<Texture name="ATSWProgressBarGlow" file="Interface\AddOns\AdvancedTradeSkillWindow2\Textures\ProgressBarFlash">
+				<Texture name="ATSWProgressBarGlow" file="Interface\AddOns\MetiersPlus\Textures\ProgressBarFlash">
 					<Size x="405" y="54"/>
 					<Anchors>
 						<Anchor point="CENTER" relativeTo="ATSWProgressBar">
@@ -721,7 +721,7 @@
                         </Anchor>
                     </Anchors>
         		</Texture>
-				<Texture file="Interface\AddOns\AdvancedTradeSkillWindow2\Textures\UI-TaxiFrame-InBetween1">
+				<Texture file="Interface\AddOns\MetiersPlus\Textures\UI-TaxiFrame-InBetween1">
                     <Size x="128" y="512"/>
                     <Anchors>
                         <Anchor point="TOPLEFT">
@@ -729,7 +729,7 @@
                         </Anchor>
                     </Anchors>
                 </Texture>
-				<Texture file="Interface\AddOns\AdvancedTradeSkillWindow2\Textures\UI-TaxiFrame-BotLeftReplacement">
+				<Texture file="Interface\AddOns\MetiersPlus\Textures\UI-TaxiFrame-BotLeftReplacement">
                     <Size x="256" y="256"/>
                     <Anchors>
                         <Anchor point="TOPLEFT">
@@ -745,7 +745,7 @@
                         </Anchor>
                     </Anchors>
                 </Texture>
-                <Texture file="Interface\AddOns\AdvancedTradeSkillWindow2\Textures\UI-TaxiFrame-BotRightReplacement">
+                <Texture file="Interface\AddOns\MetiersPlus\Textures\UI-TaxiFrame-BotRightReplacement">
                     <Size x="128" y="256"/>
                     <Anchors>
                         <Anchor point="TOPLEFT">
@@ -755,7 +755,7 @@
                 </Texture>
 			</Layer>
 			<Layer level="BORDER">
-                <Texture file="Interface\AddOns\AdvancedTradeSkillWindow2\Textures\UI-TaxiFrame-InBetween2">
+                <Texture file="Interface\AddOns\MetiersPlus\Textures\UI-TaxiFrame-InBetween2">
                     <Size x="514" y="512"/>
                     <Anchors>
                         <Anchor point="TOPLEFT">
@@ -771,7 +771,7 @@
                 </Texture>
 	      	</Layer>
 			<Layer level="ARTWORK">
-				<Texture name="ATSWParchment" file="Interface\AddOns\AdvancedTradeSkillWindow2\Textures\Parchment">
+				<Texture name="ATSWParchment" file="Interface\AddOns\MetiersPlus\Textures\Parchment">
 					<Anchors>
 						<Anchor point="TOPRIGHT">
 							<Offset x="-44" y="-74"/>
@@ -809,7 +809,7 @@
 					</Anchors>
 					<TexCoords left="0.53125" right="0.99" top="0.03125" bottom="1.0"/>
 				</Texture>
-				<Texture name="ATSWWeb" file="Interface\AddOns\AdvancedTradeSkillWindow2\Textures\Web">
+				<Texture name="ATSWWeb" file="Interface\AddOns\MetiersPlus\Textures\Web">
 					<Anchors>
 						<Anchor point="TOPLEFT">
 							<Offset x="347" y="-346"/>
@@ -835,7 +835,7 @@
 				</Texture>
 			</Layer>
 			<Layer level="ARTWORK">
-				<Texture name="ATSWBackgroundShadow" file="Interface\AddOns\AdvancedTradeSkillWindow2\Textures\Background\Shadow">
+				<Texture name="ATSWBackgroundShadow" file="Interface\AddOns\MetiersPlus\Textures\Background\Shadow">
 					<Anchors>
 						<Anchor point="TOPLEFT">
 							<Offset x="20" y="-75"/>
@@ -937,7 +937,7 @@
 						</Anchor>
 					</Anchors>
 				</FontString>
-				<Texture name="ATSWSearchIcon" file="Interface\AddOns\AdvancedTradeSkillWindow2\Textures\Search" parent="ATSWSearchLabel">
+				<Texture name="ATSWSearchIcon" file="Interface\AddOns\MetiersPlus\Textures\Search" parent="ATSWSearchLabel">
 					<Size x="12" y="12"/>
 					<Anchors>
 						<Anchor point="RIGHT" relativeTo="ATSWSearchLabel" relativePoint="LEFT">
@@ -1571,7 +1571,7 @@
 				</Anchors>
 				<Layers>
 					<Layer level="ARTWORK">
-						<Texture file="Interface\AddOns\AdvancedTradeSkillWindow2\Textures\TrainingCost">
+						<Texture file="Interface\AddOns\MetiersPlus\Textures\TrainingCost">
 							<TexCoords left="0.1" right="0.9" top="0" bottom="1"/>
 						</Texture>
 						<FontString name="ATSWTrainingPointsLabel" inherits="GameFontNormalSmall" text="TRAINING_POINTS">
@@ -1718,7 +1718,7 @@
 						end
 					</OnMouseWheel>
 					<OnEnter>
-						SetCursor("Interface\\AddOns\\AdvancedTradeSkillWindow2\\Textures\\MouseWheelCursor")
+						SetCursor("Interface\\AddOns\\MetiersPlus\\Textures\\MouseWheelCursor")
 					</OnEnter>
 					<OnLeave>
 						ResetCursor()
@@ -1906,7 +1906,7 @@
         </Anchors>
         <Layers>
 	        <Layer level="BACKGROUND">
-                <Texture file="Interface\AddOns\AdvancedTradeSkillWindow2\Textures\UI-TaxiFrame-TopLeftReplacement2">
+                <Texture file="Interface\AddOns\MetiersPlus\Textures\UI-TaxiFrame-TopLeftReplacement2">
                     <Size x="256" y="256"/>
                     <Anchors>
                         <Anchor point="TOPLEFT"/>
@@ -1920,7 +1920,7 @@
                         </Anchor>
                     </Anchors>
                 </Texture>
-                <Texture file="Interface\AddOns\AdvancedTradeSkillWindow2\Textures\UI-TaxiFrame-TopRightReplacement2">
+                <Texture file="Interface\AddOns\MetiersPlus\Textures\UI-TaxiFrame-TopRightReplacement2">
                     <Size x="256" y="256"/>
                     <Anchors>
                         <Anchor point="TOPLEFT">
@@ -1928,7 +1928,7 @@
                         </Anchor>
                     </Anchors>
                 </Texture>
-                <Texture file="Interface\AddOns\AdvancedTradeSkillWindow2\Textures\UI-TaxiFrame-BotRightReplacement2">
+                <Texture file="Interface\AddOns\MetiersPlus\Textures\UI-TaxiFrame-BotRightReplacement2">
                     <Size x="256" y="256"/>
                     <Anchors>
                         <Anchor point="TOPLEFT">
@@ -2050,7 +2050,7 @@
 		<Size x="395" y="560"/>
 		<Layers>
 			<Layer level="ARTWORK">
-				<Texture name="ATSWOptionsMenuHeader" file="Interface\AddOns\AdvancedTradeSkillWindow2\Textures\UI-DialogBox-Header">
+				<Texture name="ATSWOptionsMenuHeader" file="Interface\AddOns\MetiersPlus\Textures\UI-DialogBox-Header">
 					<Size>
 						<AbsDimension x="310" y="64"/>
 					</Size>
@@ -2096,7 +2096,7 @@
 										</Anchor>
 									</Anchors>
 								</FontString>
-								<Texture name="ATSWOFUnified" file="Interface\AddOns\AdvancedTradeSkillWindow2\Textures\Options\Unified">
+								<Texture name="ATSWOFUnified" file="Interface\AddOns\MetiersPlus\Textures\Options\Unified">
 									<Size x="78" y="37"/>
 									<Anchors>
 										<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
@@ -2141,7 +2141,7 @@
 										</Anchor>
 									</Anchors>
 								</FontString>
-								<Texture name="ATSWOFSeparate" file="Interface\AddOns\AdvancedTradeSkillWindow2\Textures\Options\Separate">
+								<Texture name="ATSWOFSeparate" file="Interface\AddOns\MetiersPlus\Textures\Options\Separate">
 									<Size x="78" y="37"/>
 									<Anchors>
 										<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
@@ -2488,7 +2488,7 @@
 						</Anchors>
 						<Scripts>
 							<OnLoad>
-								local AtlasLootTexturePath = "Interface\\AddOns\\AdvancedTradeSkillWindow2\\Textures\\Options\\AtlasLootMinimap"
+								local AtlasLootTexturePath = "Interface\\AddOns\\MetiersPlus\\Textures\\Options\\AtlasLootMinimap"
 								local Name = getglobal(this:GetName() .. "Name")
 								
 								Name:SetNormalTexture(AtlasLootTexturePath)
@@ -2787,7 +2787,7 @@
                         <Anchor point="TOPLEFT"/>
                     </Anchors>
                 </Texture>
-                <Texture file="Interface\AddOns\AdvancedTradeSkillWindow2\Textures\UI-TaxiFrame-BotRightReplacement2">
+                <Texture file="Interface\AddOns\MetiersPlus\Textures\UI-TaxiFrame-BotRightReplacement2">
                     <Size x="256" y="200"/>
                     <Anchors>
                         <Anchor point="TOPLEFT">

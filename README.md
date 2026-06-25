@@ -25,7 +25,7 @@ banque et les autres persos.
 ### Installation
 - **Via le launcher Ebonhold** (recommandé) : Catalogue → installer « Métiers+ ».
 - **Manuel** : télécharge le `.zip` de la dernière release, extrais le dossier
-  `AdvancedTradeSkillWindow2` dans `World of Warcraft\Interface\AddOns`, puis `/reload` en jeu.
+  `MetiersPlus` dans `World of Warcraft\Interface\AddOns`, puis `/reload` en jeu.
 
 ### Utilisation
 Ouvre n'importe quel métier — la fenêtre remplace celle de Blizzard automatiquement.
@@ -54,7 +54,7 @@ bags / bank / alts.
 
 ### Install
 - **Ebonhold launcher** (recommended): Catalogue → install "Métiers+".
-- **Manual**: download the latest release `.zip`, extract the `AdvancedTradeSkillWindow2`
+- **Manual**: download the latest release `.zip`, extract the `MetiersPlus`
   folder into `World of Warcraft\Interface\AddOns`, then `/reload` in game.
 
 Open any profession — the window replaces the Blizzard one automatically. Options: `/atsw config`.

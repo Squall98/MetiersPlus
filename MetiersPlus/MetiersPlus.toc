@@ -10,7 +10,7 @@
 ## X-Website: https://github.com/Shellyoung/AdvancedTradeSkillWindow2
 
 Localization.lua
-AdvancedTradeSkillWindow2.lua
-AdvancedTradeSkillWindow2.xml
+MetiersPlus.lua
+MetiersPlus.xml
 CustomSorting.lua
 CustomSorting.xml
