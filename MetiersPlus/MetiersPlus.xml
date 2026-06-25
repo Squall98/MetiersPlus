@@ -598,13 +598,6 @@
 			</Layer>
 		</Layers>
 		<Scripts>
-			<OnClick>
-				if this.Name ~= ATSW_Profession[ATSW_realm][ATSW_player] then
-					CastSpellByName(this.Name)
-				else
-					this:SetChecked()
-				end
-			</OnClick>
 			<OnEnter>
 				GameTooltip:SetOwner(this, "ANCHOR_RIGHT")
 				GameTooltip:SetText(this.Name)

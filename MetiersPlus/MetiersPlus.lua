@@ -58,6 +58,10 @@ GetCraftSpellFocus       = GetCraftSpellFocus       or function() return nil end
 GetCraftButtonToken      = GetCraftButtonToken      or function() return 'CREATE' end
 SelectCraft              = SelectCraft              or function() end
 DoCraft                  = DoCraft                  or function() end
+-- GetPetTrainingPoints a ete retire en 3.0.2 (refonte des familiers WotLK) : nil sur 3.3.5.
+-- Les branches "Dressage de betes" (IsBeastTraining) l'appellent encore -> stub a 0,0 pour
+-- ne jamais planter ("attempt to call a nil value" / arithmetique sur nil).
+GetPetTrainingPoints     = GetPetTrainingPoints     or function() return 0, 0 end
 
 ATSW_MAX_TRADESKILL_TABS 			= 8
 ATSW_TRADESKILL_HEIGHT 				= 18
@@ -736,12 +740,14 @@ local function GetCraftCaption()
 						else		Skill 						= GetCraftName()
 									_, Rank, MaxRank 	= GetCraftDisplaySkillLine()	end
 	
+	if Skill == 'UNKNOWN' then Skill = nil end		-- transient pendant un changement de metier : "UNKNOWN" n'est pas un vrai nom -> ne pas l'afficher comme titre
+
 	if ATSW_ProfessionExists(Skill) then
 		Name = Skill
 	else
-		Name = LastCastName
+		Name = Skill or LastCastName	-- Ebonhold : on prefere le nom FIABLE renvoye par l'API (ex. "Minage" pour la Fonte) ; LastCastName n'est qu'un dernier recours car il est nil/perime pendant l'event chain (hooksecurefunc = post-hook) -> sinon SameProfession se trompe et la liste de recettes ne se rafraichit pas
 	end
-	
+
 	return Name, Rank, MaxRank
 end
 
@@ -892,6 +898,7 @@ local function SelectCraftItem				(Index)
 end
 
 local function Craft							(Index, Amount)
+	if not Index then return end		-- Ebonhold : Index nil possible (position de recette perimee apres changement de metier) -> ne pas appeler DoTradeSkill/DoCraft avec nil
 	if TradeSkill	then	DoTradeSkill(Index, Amount)
 						else	DoCraft(Index) end
 end
@@ -1368,11 +1375,13 @@ function ATSW_TooltipSetSkill(Tooltip, Index)
 	if not Index then
 		return
 	end
-	
+
 	if ATSW_TradeSkill() then
-		Tooltip:SetTradeSkillItem(Index)
+		if Index < 1 or Index > GetNumTradeSkills() then return end		-- borne basse : Position hors limites apres un changement de metier
+		pcall(Tooltip.SetTradeSkillItem, Tooltip, Index)		-- pcall : l'index peut etre DANS les bornes mais pointer un en-tete de categorie ou un etat transitoire (liste en cours de mise a jour pendant qu'on survole) -> "Invalid trade skill item"
 	else
-		Tooltip:SetCraftSpell(Index)
+		if Index < 1 or Index > GetNumCrafts() then return end
+		pcall(Tooltip.SetCraftSpell, Tooltip, Index)
 	end
 end
 
@@ -1595,8 +1604,11 @@ function ATSW_OnLoad()
 	
 	-- Create side tabs
 	for T = 1, ATSW_MAX_TRADESKILL_TABS do
-		local CB = CreateFrame('CheckButton', 'ATSWFrameTab' .. T, ATSWFrameSideTabsFrame, 'ATSWTabTemplate')
-		
+		-- WotLK 3.3.5 : on ajoute SecureActionButtonTemplate pour que le clic puisse lancer le SORT
+		-- du metier (action protegee, autorisee uniquement via un bouton securise + clic materiel).
+		local CB = CreateFrame('CheckButton', 'ATSWFrameTab' .. T, ATSWFrameSideTabsFrame, 'ATSWTabTemplate,SecureActionButtonTemplate')
+		CB:RegisterForClicks('LeftButtonUp')
+
 		if T == 1 then
 			CB:SetPoint('TOPLEFT', ATSWFrameSideTabsFrame, 'TOPRIGHT', 0, -36)
 		else
@@ -2068,9 +2080,16 @@ function ATSW_ConfigureSkillButtons(Exception)
 		end
 		
 		SetVisible(Tab, TabTexture)
-		
+
 		Tab.Name = TabName
 		Tab:SetNormalTexture(TabTexture)
+
+		-- Bouton securise : on (re)pose le sort de metier a lancer au clic. Impossible en combat
+		-- (les attributs d'un cadre securise sont verrouilles pendant le combat).
+		if not InCombatLockdown() then
+			Tab:SetAttribute('type', TabName and 'spell' or nil)
+			Tab:SetAttribute('spell', TabName)
+		end
 	end
 	
 	if Profession() then
@@ -2156,51 +2175,14 @@ function ATSW_SwitchToFrame(Frame)
 end
 
 local function LoadAllProfessionsOnce()
-	if not LoadingProfessions then
-		LoadingProfessions 			= true
-		
-		local CurrentProfession 	= GetCraftCaption()
-		local LastName				=	CurrentProfession
-		
-		local _, _, _, NumSpells 	= GetSpellTabInfo(1)
-		
-		ATSWFrame:	UnregisterEvent(	'TRADE_SKILL_SHOW'	)
-		ATSWFrame:	UnregisterEvent(	'TRADE_SKILL_CLOSE'	)
-		ATSWFrame:	UnregisterEvent(	'CRAFT_SHOW'				)
-		ATSWFrame:	UnregisterEvent(	'CRAFT_CLOSE'				)
-		
-		local OldSound 				= PlaySound
-		PlaySound 					= Stub
-		
-		for I in ipairs(Professions) do
-			local ProfessionTexture = Icon(Professions[I])
-			
-			for B = 1, NumSpells do
-				local Texture			= GetSpellTexture	(B, 'BOOKTYPE_SPELL')
-				local Name 			= GetSpellName		(B, 'BOOKTYPE_SPELL')
-				
-				if Name and not string.find(Name, CurrentProfession) and Texture == ProfessionTexture then
-					CastSpellByName(Name)
-					LastName = Name
-					
-					break
-				end
-			end
-		end
-		
-		if LastName ~= CurrentProfession then
-			CloseTradeSkill()
-			CloseCraft()
-			CastSpellByName(CurrentProfession)
-		end
-		
-		PlaySound 						= OldSound
-		
-		ATSWFrame:	RegisterEvent(	'TRADE_SKILL_SHOW'	)
-		ATSWFrame:	RegisterEvent(	'TRADE_SKILL_CLOSE'	)
-		ATSWFrame:	RegisterEvent(	'CRAFT_SHOW'				)
-		ATSWFrame:	RegisterEvent(	'CRAFT_CLOSE'				)
-	end
+	-- Vanilla 1.12 : cette fonction pre-chargeait les recettes de TOUS les metiers appris en
+	-- lancant successivement chaque metier via CastSpellByName (sons coupes, events suspendus),
+	-- puis rouvrait le metier courant. En WotLK 3.3.5 CastSpellByName est une fonction PROTEGEE :
+	-- l'appeler depuis un addon est bloque par le moteur ("action reservee a l'IU de Blizzard" +
+	-- popup ADDON_ACTION_BLOCKED). Le pre-chargement est donc impossible sur 3.3.5 et n'est plus
+	-- qu'une source de popups. On le neutralise : chaque metier charge ses recettes a son
+	-- ouverture normale depuis le grimoire (comportement standard 3.3.5).
+	LoadingProfessions = true
 end
 
 local function ATSW_Show()
@@ -2223,6 +2205,7 @@ local function ATSW_Show()
 	end
 	
 	ATSW_InitializeFrame					()
+	if not Profession() then return end
 	ATSW_UpdateCaption					()
 	ATSW_ShowSort						()
 	ATSW_ShowSearch					()
@@ -2372,6 +2355,7 @@ function ATSW_InitializeFrame()
 	
 	if not SameProfession or RecipesSize() == 0 then
 		GetProfession					()
+		if not Profession() then return end
 		InitializeTables					()
 		ATSW_ShowDropDown	()
 		
@@ -2424,9 +2408,10 @@ function ATSW_FindSpecialization()
 
 function ATSW_UpdateCaption()
 	local Name = GetCraftCaption()
-	
+	if not Name then return end		-- garde : pas de caption identifiable (event chain), on ne crashe pas format()
+
 	-- Set status bar info
-	
+
 	ATSWFrameTitleText:SetText(format(TEXT(TRADE_SKILL_TITLE), Name) .. ATSW_FindSpecialization())
 	ATSW_UpdateStatusBarRank()
 	
@@ -2792,13 +2777,19 @@ function ATSW_OnEvent()
 			ATSW_StopProcessing()
 		end
 	elseif 	event == 'TRADE_SKILL_SHOW' 						then
-		if UIParent:IsVisible() then
+		ATSW_CreateViewToggle()
+		if ATSW_Options.Blizzard then
+			-- Preference "vue Blizzard" chargee depuis les SavedVariables : au 1er metier ouvert de la
+			-- session, l'addon (encore enregistre par ATSW_OnLoad) capte l'event -> on bascule en mode
+			-- natif (ATSW_SetBlizzardView se desenregistre lui-meme). Les ouvertures suivantes sont natives.
+			ATSW_SetBlizzardView(true)
+		elseif UIParent:IsVisible() then
 			if ATSWFrame:IsVisible() or ATSWCSFrame:IsVisible() then
 				ATSWFrame:	UnregisterEvent	('CRAFT_CLOSE'		)
 				CloseCraft()
 				ATSWFrame:	RegisterEvent		('CRAFT_CLOSE'		)
 			end
-			
+
 			TradeSkill = true
 			ATSW_Show()
 		else
@@ -2823,7 +2814,11 @@ function ATSW_OnEvent()
 			CloseCraft()
 		end
 	elseif event == 'TRADE_SKILL_CLOSE' then
-		ATSW_Hide()
+		if ATSW_Options.Blizzard then
+			if TradeSkillFrame and TradeSkillFrame:IsVisible() then HideUIPanel(TradeSkillFrame) end
+		else
+			ATSW_Hide()
+		end
 	elseif event == 'CRAFT_CLOSE' then
 		ATSW_Hide()
     end
@@ -3047,7 +3042,83 @@ function ATSWCreateButton_OnClick()
 end
 
 function ATSW_ShowFrame()
-	CastSpellByName(ATSW_ProfessionExists(Profession()) and Profession() or GetFirstProfession() or '')
+	-- WotLK 3.3.5 : ouvrir un metier depuis un addon imposait CastSpellByName, une fonction
+	-- PROTEGEE (bloquee par le moteur -> popup ADDON_ACTION_BLOCKED). On ne peut donc pas ouvrir
+	-- un metier par commande/raccourci. Si un metier est deja ouvert, on reaffiche/rafraichit
+	-- MetiersPlus ; sinon on invite a passer par le grimoire.
+	if GetNumTradeSkills() > 0 then
+		ATSW_Show()
+	else
+		DEFAULT_CHAT_FRAME:AddMessage('Metiers+ : ouvre ton metier depuis le grimoire (touche P) pour afficher la fenetre. Tape /atsw config pour les options.')
+	end
+end
+
+-- Affiche ET repeuple la fenetre de metier native de Blizzard. Ses events de mise a jour ayant
+-- ete coupes au chargement (ATSW_OnLoad), un simple ShowUIPanel l'affiche VIDE ("UNKNOWN", aucune
+-- recette) : il faut forcer la selection + la mise a jour a partir du metier deja ouvert.
+function ATSW_ShowBlizzardFrame()
+	if not TradeSkillFrame then return end
+
+	ShowUIPanel(TradeSkillFrame)
+
+	-- On force seulement la mise a jour de la LISTE (les events natifs ayant ete coupes au
+	-- chargement). On NE force PAS de selection : forcer une selection desynchronise les boutons
+	-- de reactifs de la fenetre native -> son propre code d'infobulle plante ("Invalid trade skill
+	-- item"). L'utilisateur clique une recette -> Blizzard gere la selection nativement, sans bug.
+	if TradeSkillFrame_Update then
+		TradeSkillFrame_Update()
+	end
+end
+
+-- Bascule entre la fenetre amelioree (MetiersPlus) et la fenetre de metier native de Blizzard.
+-- Le choix est memorise dans ATSW_Options.Blizzard (SavedVariable).
+function ATSW_SetBlizzardView(on)
+	ATSW_Options.Blizzard = on and true or false
+	ATSW_CreateViewToggle()
+
+	if ATSW_Options.Blizzard then
+		-- VUE BLIZZARD = "comme si l'addon n'etait pas la". On rend TOUT le pilotage a Blizzard :
+		-- on restaure les events que ATSW_OnLoad avait coupes (mise a jour de la fenetre native +
+		-- affichage pilote par UIParent) et on DESACTIVE l'interception de l'addon. Les prochaines
+		-- ouvertures de metier afficheront donc la fenetre native pure, exactement comme sans addon.
+		RegisterEvents(TradeSkillFrame, 'SKILL_LINES_CHANGED', 'PLAYER_ENTERING_WORLD', 'TRADE_SKILL_UPDATE', 'UNIT_PORTRAIT_UPDATE')
+		RegisterEvents(UIParent, 'TRADE_SKILL_SHOW', 'TRADE_SKILL_CLOSE', 'CRAFT_SHOW', 'CRAFT_CLOSE')
+		UnregisterEvents(ATSWFrame, 'TRADE_SKILL_SHOW', 'TRADE_SKILL_CLOSE', 'CRAFT_SHOW', 'CRAFT_CLOSE')
+		if ATSWFrame:IsVisible() or ATSWCSFrame:IsVisible() then ATSW_SwitchToFrame() end
+		if TradeSkillFrame and GetNumTradeSkills() > 0 then ATSW_ShowBlizzardFrame() end		-- metier deja ouvert : on montre le natif tout de suite
+	else
+		-- RETOUR a MetiersPlus : on reprend la main exactement comme au chargement (ATSW_OnLoad) :
+		-- on recoupe les events natifs et on re-enregistre l'interception de l'addon.
+		UnregisterEvents(TradeSkillFrame, 'SKILL_LINES_CHANGED', 'PLAYER_ENTERING_WORLD', 'TRADE_SKILL_UPDATE', 'UNIT_PORTRAIT_UPDATE')
+		UnregisterEvents(UIParent, 'TRADE_SKILL_SHOW', 'TRADE_SKILL_CLOSE', 'CRAFT_SHOW', 'CRAFT_CLOSE')
+		RegisterEvents(ATSWFrame, 'TRADE_SKILL_SHOW', 'TRADE_SKILL_CLOSE', 'CRAFT_SHOW', 'CRAFT_CLOSE')
+		if TradeSkillFrame and TradeSkillFrame:IsVisible() then HideUIPanel(TradeSkillFrame) end
+		if GetNumTradeSkills() > 0 then TradeSkill = true; ATSW_Show() end
+	end
+end
+
+-- Cree (une seule fois) les boutons de bascule de vue : "Blizzard" sur la fenetre MetiersPlus,
+-- et "Metiers+" sur la fenetre de Blizzard (pour pouvoir revenir).
+function ATSW_CreateViewToggle()
+	if ATSWFrame and ATSWFrameCloseButton and not ATSWBlizzToggle then
+		local b = CreateFrame('Button', 'ATSWBlizzToggle', ATSWFrame, 'UIPanelButtonTemplate')
+		b:SetWidth(86)
+		b:SetHeight(20)
+		b:SetText('Blizzard')
+		b:SetPoint('RIGHT', ATSWFrameCloseButton, 'LEFT', -6, 0)
+		b:SetFrameLevel(ATSWFrame:GetFrameLevel() + 5)
+		b:SetScript('OnClick', function() ATSW_SetBlizzardView(true) end)
+	end
+
+	if TradeSkillFrame and not ATSWReturnToAddon then
+		local r = CreateFrame('Button', 'ATSWReturnToAddon', TradeSkillFrame, 'UIPanelButtonTemplate')
+		r:SetWidth(86)
+		r:SetHeight(21)
+		r:SetText('Metiers+')
+		r:SetPoint('TOPRIGHT', TradeSkillFrame, 'TOPRIGHT', -56, -16)
+		r:SetFrameLevel(TradeSkillFrame:GetFrameLevel() + 5)
+		r:SetScript('OnClick', function() ATSW_SetBlizzardView(false) end)
+	end
 end
 
 function ATSW_Command(Command)
@@ -3061,6 +3132,9 @@ function ATSW_Command(Command)
 		ATSW_ToggleOptionsFrame()
 	elseif 	Command == 'debug' 	then
 		ATSW_Debug = not ATSW_Debug
+	elseif 	Command == 'blizzard' or Command == 'blizz' then
+		ATSW_SetBlizzardView(not ATSW_Options.Blizzard)
+		Chat('Metiers+ : vue ' .. (ATSW_Options.Blizzard and 'Blizzard' or 'amelioree (Metiers+)'))
     else
 		ATSW_ShowFrame()
 	end
@@ -3102,13 +3176,16 @@ function ATSWRecipe_OnClick()
 				end
 			end
 		elseif string.find(this:GetName(), 'ATSWReagent') then
-			local ReagentID = ATSW_LinkToID(GetReagentLink(GetPositionFromGame(RecipeSelected()), this:GetID()))
-			
-			for I = 1, RecipesSize() do
-				if ReagentID == ATSW_LinkToID(Recipe(I).Link) then
-					table.insert(PreviousRecipes(), RecipeSelected())
-					
-					ATSW_SelectRecipe(Recipe(I).Name)
+			local Position = GetPositionFromGame(RecipeSelected())		-- Ebonhold : peut etre nil (recette non resolue) -> GetTradeSkillReagentItemLink(nil) planterait
+			if Position then
+				local ReagentID = ATSW_LinkToID(GetReagentLink(Position, this:GetID()))
+
+				for I = 1, RecipesSize() do
+					if ReagentID == ATSW_LinkToID(Recipe(I).Link) then
+						table.insert(PreviousRecipes(), RecipeSelected())
+
+						ATSW_SelectRecipe(Recipe(I).Name)
+					end
 				end
 			end
 		end
@@ -4280,7 +4357,9 @@ function ATSW_ShowRecipe(Name)
 	ATSWRecipeIcon:Show()
 	
 	local Recipe = Recipe(GetRecipePosition(Name))
-	
+
+	if not Recipe then return end		-- Ebonhold : selection perimee apres un changement de metier -> recette introuvable, on n'affiche pas (evite "attempt to index nil")
+
 	-- Name
 	ATSWRecipeName:SetText(Recipe.Name)
 	
@@ -4761,10 +4840,14 @@ local function GetSayTooltipString()
 					ChatNumber = ChatFrame1EditBox.tellTarget
 			elseif ChatType == 'CHANNEL' then
 					ChatNumber = ChatFrame1EditBox.channelTarget
-					
+
 					local ChatID, ChatName = GetChannelName(ChatNumber)
-				
-					SayTarget = ATSW_TOOLTIP_TO .. '[' .. ChatID .. '. ' .. ChatName ..']'
+
+					if ChatID and ChatName then		-- canal quitte/perime : GetChannelName renvoie 0/nil -> concat sur nil planterait
+						SayTarget = ATSW_TOOLTIP_TO .. '[' .. ChatID .. '. ' .. ChatName ..']'
+					else
+						SayTarget = ATSW_TOOLTIP_TO
+					end
 			elseif ChatType == 'YELL' then
 					SayTarget = ATSW_TOOLTIP_TO .. ATSW_TOOLTIP_YELL
 			elseif ChatType == 'PARTY' then
@@ -4818,7 +4901,10 @@ function ATSW_SayReagents(Position)
 		
 		local Reagents = GetReagents(R.Name)
 		
-		local S = string.format(TooltipString, '^.*|cffffffff?(%s*)') .. '|r?\n\n' .. LineStart .. R.Link .. ' ' .. ATSW_REAGENTLIST2
+		-- Ebonhold : ne pas passer TooltipString (chaine localisee runtime) comme PATRON de format() :
+		-- un '%' dans un nom de canal/cible ferait planter ("invalid option to format"). L'argument
+		-- etait de toute facon ignore (pas de directive dans la chaine) -> on concatene directement.
+		local S = (TooltipString or '') .. '|r?\n\n' .. LineStart .. R.Link .. ' ' .. ATSW_REAGENTLIST2
 		
 		Lines = {}
 		
