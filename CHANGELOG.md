@@ -1,5 +1,23 @@
 # Changelog
 
+## v1.2 — 2026-10-20 — fonctions Craft de secours rendues locales
+
+- Les fonctions de secours de l'ancienne API Craft (`GetNumCrafts`, `GetCraftName`,
+  `GetCraftInfo`, `DoCraft`…) et `GetPetTrainingPoints` étaient déclarées en **globales** :
+  d'autres addons pouvaient en conclure que l'API Craft existe sur 3.3.5a. Elles sont
+  désormais **locales** au fichier `MetiersPlus.lua` ; le seul appel extérieur (un script XML)
+  passe par `ATSW_GetCraftReagentItemLink`. Aucun changement de fonctionnement pour Métiers+.
+- Inchangés : les SavedVariables `ATSW_*` et le cadre `ATSWFrame` (utilisé par
+  AckisRecipeList).
+
+*English*
+- The fallback stubs for the old Craft API (`GetNumCrafts`, `GetCraftName`, `GetCraftInfo`,
+  `DoCraft`…) and `GetPetTrainingPoints` were declared as **globals**, which could make other
+  addons believe the Craft API exists on 3.3.5a. They are now **local** to `MetiersPlus.lua`;
+  the only outside caller (an XML script) goes through `ATSW_GetCraftReagentItemLink`. No
+  behaviour change for Métiers+.
+- Unchanged: the `ATSW_*` SavedVariables and the `ATSWFrame` frame (used by AckisRecipeList).
+
 ## v1.1 — stabilité 3.3.5a, changement de métier par onglet, vue Blizzard
 
 Correctifs de stabilité et deux nouvelles fonctions, après tests en jeu sur Ebonhold.

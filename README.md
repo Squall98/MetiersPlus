@@ -31,6 +31,13 @@ banque et les autres persos.
 Ouvre n'importe quel métier — la fenêtre remplace celle de Blizzard automatiquement.
 Options en jeu : `/atsw config`.
 
+### Compatibilité avec les autres addons
+- Les SavedVariables gardent leurs noms d'origine (`ATSW_*`) et la fenêtre s'appelle toujours
+  `ATSWFrame`, ce qui permet à AckisRecipeList de s'y accrocher.
+- Depuis la v1.2, les fonctions de secours de l'ancienne API Craft (absente en 3.3.5a) sont
+  locales à l'addon : Métiers+ ne déclare plus de fausses fonctions Blizzard globales qui
+  pourraient tromper d'autres addons.
+
 ### Crédits
 Addon d'origine **Advanced Trade Skill Window 2**, par :
 - **Alexander Shelokhnev** (*Dreamios* / *Shellyoung*) — auteur de la réécriture ATSW2 (2022).
@@ -69,4 +76,6 @@ community; if an original author objects, open an issue and it will be removed.
 ### What the port changes
 Compatibility fixes only — no feature changes (events, Craft API, Lua 5.0 `arg`, Button
 font/colour methods, `UIDropDownMenu` / `FauxScrollFrame` signatures, renamed globals,
-protected-function tainting, etc.).
+protected-function tainting, etc.). The SavedVariables keep their original `ATSW_*` names and
+the window is still `ATSWFrame` (AckisRecipeList hooks into it). Since v1.2 the fallback stubs
+for the missing Craft API are local to the addon, so no fake Blizzard globals are declared.

@@ -42,26 +42,37 @@ end
 
 -- WotLK 3.3.5 (Ebonhold): the Craft API (the old 1.x beast-training / enchanting system)
 -- was removed from this core. Enchanting now flows through the TradeSkill API, so ATSW's
--- Craft branch is dormant; stub the Craft globals it calls so they never error when nil.
-GetNumCrafts             = GetNumCrafts             or function() return 0 end
-CloseCraft               = CloseCraft               or function() end
-GetCraftName             = GetCraftName             or function() return nil end
-GetCraftDisplaySkillLine = GetCraftDisplaySkillLine or function() return nil, 0, 0 end
-GetCraftInfo             = GetCraftInfo             or function() return nil end
-GetCraftIcon             = GetCraftIcon             or function() return nil end
-GetCraftItemLink         = GetCraftItemLink         or function() return nil end
-GetCraftDescription      = GetCraftDescription      or function() return nil end
-GetCraftNumReagents      = GetCraftNumReagents      or function() return 0 end
-GetCraftReagentInfo      = GetCraftReagentInfo      or function() return nil end
-GetCraftReagentItemLink  = GetCraftReagentItemLink  or function() return nil end
-GetCraftSpellFocus       = GetCraftSpellFocus       or function() return nil end
-GetCraftButtonToken      = GetCraftButtonToken      or function() return 'CREATE' end
-SelectCraft              = SelectCraft              or function() end
-DoCraft                  = DoCraft                  or function() end
+-- Craft branch is dormant; stub the Craft functions it calls so they never error when nil.
+-- Metiers+ 1.2: these stubs are LOCAL to this file. As globals they made other addons
+-- believe the Craft API exists (e.g. "if GetCraftName then ... end" checks). The only
+-- caller outside this file (an XML OnClick in MetiersPlus.xml) goes through
+-- ATSW_GetCraftReagentItemLink below.
+local GetNumCrafts             = GetNumCrafts             or function() return 0 end
+local CloseCraft               = CloseCraft               or function() end
+local GetCraftName             = GetCraftName             or function() return nil end
+local GetCraftDisplaySkillLine = GetCraftDisplaySkillLine or function() return nil, 0, 0 end
+local GetCraftInfo             = GetCraftInfo             or function() return nil end
+local GetCraftIcon             = GetCraftIcon             or function() return nil end
+local GetCraftItemLink         = GetCraftItemLink         or function() return nil end
+local GetCraftDescription      = GetCraftDescription      or function() return nil end
+local GetCraftNumReagents      = GetCraftNumReagents      or function() return 0 end
+local GetCraftReagentInfo      = GetCraftReagentInfo      or function() return nil end
+local GetCraftReagentItemLink  = GetCraftReagentItemLink  or function() return nil end
+local GetCraftSpellFocus       = GetCraftSpellFocus       or function() return nil end
+local GetCraftButtonToken      = GetCraftButtonToken      or function() return 'CREATE' end
+local SelectCraft              = SelectCraft              or function() end
+local DoCraft                  = DoCraft                  or function() end
 -- GetPetTrainingPoints a ete retire en 3.0.2 (refonte des familiers WotLK) : nil sur 3.3.5.
 -- Les branches "Dressage de betes" (IsBeastTraining) l'appellent encore -> stub a 0,0 pour
 -- ne jamais planter ("attempt to call a nil value" / arithmetique sur nil).
-GetPetTrainingPoints     = GetPetTrainingPoints     or function() return 0, 0 end
+-- Local lui aussi, pour la meme raison que les fonctions Craft ci-dessus.
+local GetPetTrainingPoints     = GetPetTrainingPoints     or function() return 0, 0 end
+
+-- Acces pour les scripts XML (qui ne voient que l'environnement global) : nom prefixe
+-- ATSW_ pour ne pas se faire passer pour l'API Blizzard.
+function ATSW_GetCraftReagentItemLink(...)
+	return GetCraftReagentItemLink(...)
+end
 
 ATSW_MAX_TRADESKILL_TABS 			= 8
 ATSW_TRADESKILL_HEIGHT 				= 18

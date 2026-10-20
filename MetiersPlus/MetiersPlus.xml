@@ -391,7 +391,7 @@
 				if ATSW_TradeSkill() then
 					this.Link = GetTradeSkillReagentItemLink(RecipeIndex, ReagentIndex)
 				else
-					this.Link = GetCraftReagentItemLink(RecipeIndex, ReagentIndex)
+					this.Link = ATSW_GetCraftReagentItemLink(RecipeIndex, ReagentIndex)
 				end
 				
 				ATSWRecipe_OnClick()
