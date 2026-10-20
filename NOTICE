@@ -1,0 +1,56 @@
+Métiers+ (MetiersPlus) - NOTICE
+===============================
+
+[FR]
+
+Métiers+ est un portage pour WoW 3.3.5a (serveur Ebonhold) de l'addon
+Advanced Trade Skill Window 2, version amont 2.1.16 :
+  https://github.com/Shellyoung/AdvancedTradeSkillWindow2
+
+Auteurs du code d'origine :
+- Alexander Shelokhnev (« Dreamios » / Shellyoung) : réécriture ATSW2 (2022) ;
+- Rene Schneider (« Slarti », EU-Blackhand) : Advanced Trade Skill Window
+  d'origine (2006) ;
+- laytya : corrections (2017).
+En-tête des sources d'origine : « copyright 2006 by Rene Schneider (Slarti on
+EU-Blackhand), 2017 by laytya » et « Modified by Alexander Shelokhnev (Dreamios
+on Tel'Abim (Turtle-WoW)) in 2022 ».
+
+Le projet d'origine ne publie aucune licence : son code reste tous droits
+réservés à ses auteurs. La licence MIT du fichier LICENSE ne couvre que les
+modifications de portage de Squall98 ; elle ne change rien aux droits sur le
+code d'origine et ne permet pas de le réutiliser au-delà de ce que ses auteurs
+autorisent.
+
+Ce portage est partagé gratuitement pour la communauté Ebonhold, par
+reconnaissance pour le travail des auteurs. Sur simple demande de l'un d'eux
+(issue sur ce dépôt ou message à Squall98), il sera retiré.
+
+Les éléments propres au jeu (noms, interface) appartiennent à Blizzard
+Entertainment.
+
+[EN]
+
+Métiers+ is a WoW 3.3.5a port (Ebonhold server) of the Advanced Trade Skill
+Window 2 addon, upstream version 2.1.16:
+  https://github.com/Shellyoung/AdvancedTradeSkillWindow2
+
+Original code authors:
+- Alexander Shelokhnev ("Dreamios" / Shellyoung): ATSW2 rewrite (2022);
+- Rene Schneider ("Slarti", EU-Blackhand): original Advanced Trade Skill
+  Window (2006);
+- laytya: fixes (2017).
+Original source header: "copyright 2006 by Rene Schneider (Slarti on
+EU-Blackhand), 2017 by laytya" and "Modified by Alexander Shelokhnev (Dreamios
+on Tel'Abim (Turtle-WoW)) in 2022".
+
+The upstream project publishes no license: its code remains all rights
+reserved by its authors. The MIT license in the LICENSE file only covers
+Squall98's porting modifications; it does not change the rights on the original
+code and does not allow reusing it beyond what its authors permit.
+
+This port is shared free of charge for the Ebonhold community, in recognition
+of the authors' work. On simple request from any of them (an issue on this
+repository or a message to Squall98), it will be removed.
+
+Game-specific elements (names, interface) belong to Blizzard Entertainment.

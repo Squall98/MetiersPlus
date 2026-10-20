@@ -50,6 +50,11 @@ Le projet d'origine vise WoW **Vanilla 1.12** et n'a **aucune licence** (tous dr
 de leur travail. Si un auteur d'origine préfère qu'il ne soit pas hébergé ici, qu'il ouvre une
 issue et il sera retiré.
 
+### Licence
+- [LICENSE](LICENSE) : licence **MIT pour les seules modifications de portage de Squall98**.
+- [NOTICE](NOTICE) : le code d'origine d'ATSW2 n'est pas couvert par cette licence et reste
+  tous droits réservés à ses auteurs.
+
 ---
 
 ## English
@@ -72,6 +77,10 @@ All credit for the addon itself goes to the original authors — **Shellyoung** 
 <https://github.com/Shellyoung/AdvancedTradeSkillWindow2>. The upstream project targets Vanilla
 1.12 and carries no license (all rights reserved). This 3.3.5a port is shared for the Ebonhold
 community; if an original author objects, open an issue and it will be removed.
+
+### License
+[LICENSE](LICENSE): **MIT for Squall98's porting modifications only**. The original ATSW2 code
+is not covered by it and remains all rights reserved by its authors — see [NOTICE](NOTICE).
 
 ### What the port changes
 Compatibility fixes only — no feature changes (events, Craft API, Lua 5.0 `arg`, Button

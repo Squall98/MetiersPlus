@@ -1,4 +1,39 @@
-MIT License
+Métiers+ (MetiersPlus) - licence / license
+==========================================
+
+[FR]
+
+Ce dépôt contient deux choses dont les droits sont différents :
+
+1. Le code d'origine d'Advanced Trade Skill Window 2 (Alexander Shelokhnev
+   « Shellyoung », d'après Rene Schneider et laytya). Il n'est PAS couvert par
+   la licence ci-dessous : il n'a pas de licence publiée et reste tous droits
+   réservés à ses auteurs. Voir le fichier NOTICE.
+
+2. Les modifications de portage vers WoW 3.3.5a réalisées par Squall98 (2026).
+   Seules ces modifications sont placées sous la licence MIT ci-dessous.
+
+Dans le texte de la licence MIT ci-dessous, « the Software » désigne uniquement
+ces modifications de Squall98 (point 2).
+
+[EN]
+
+This repository contains two things with different rights:
+
+1. The original Advanced Trade Skill Window 2 code (Alexander Shelokhnev
+   "Shellyoung", based on the work of Rene Schneider and laytya). It is NOT
+   covered by the license below: it has no published license and remains all
+   rights reserved by its authors. See the NOTICE file.
+
+2. The WoW 3.3.5a porting modifications made by Squall98 (2026). Only these
+   modifications are licensed under the MIT license below.
+
+In the MIT license text below, "the Software" means only these modifications
+by Squall98 (point 2).
+
+--------------------------------------------------------------------------------
+MIT License - modifications de Squall98 uniquement / Squall98's modifications only
+--------------------------------------------------------------------------------
 
 Copyright (c) 2026 Squall98
 
